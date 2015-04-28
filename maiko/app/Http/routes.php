@@ -22,6 +22,7 @@ Route::group(['prefix'=>'/','middleware'=>'authpage'],function(){
 	Route::get('/Order/PO','HomeController@opo');
 	Route::get('/Transaksi','HomeController@transaction');
 	Route::get('/Signout','LoginController@signout');
+	Route::post('/Product/Buy','HomeController@buy');
 	
 	
 });
@@ -32,6 +33,7 @@ Route::get('/Product/Ready','HomeController@pready');
 Route::get('/Product/PO','HomeController@ppo');
 Route::get('/Pembayaran','HomeController@help');
 Route::get('/Product/{id}/{clean}','HomeController@pdetail');
+
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',

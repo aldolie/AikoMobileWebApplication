@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Redirect;
 
 class HomeController extends Controller {
 
@@ -29,6 +30,30 @@ class HomeController extends Controller {
 		$this->help='http://localhost/store/help/';
 		//$this->middleware('auth');
 	}
+
+	public function buy(Request $request){
+
+		$user=null;
+		//$url=$request->path();
+		$url=$request->headers->get('referer');
+		if(Session::has('user')){
+			$user=Session::get('user');
+			$quantity=$request->input('quantity');
+			$userid=$user->userid;
+			$productid=$request->input('id');
+			$client = new Client();
+			$response = $client->post($this->api.'transaction_undef_buy/'.$request->route('id') ,['future' => true,'body'=>['userid'=>$userid,'productid'=>$productid,'quantity'=>$quantity],'auth' =>  ['administrator', 'KJHASDF89.ajHFAHF$']]);
+			$data=json_decode($response->getBody());
+			if($data->status=='failed')
+			{
+				return Redirect::to($url)->withErrors(['0'=>$data->error]);
+			}
+			else if($data->status=='success'){
+				return Redirect::to($url)->with('message', 'Pembelian Berhasil');
+			}
+		}
+	}
+
 	public function pready(){
 		$user=null;
 		if(Session::has('user'))
@@ -60,7 +85,7 @@ class HomeController extends Controller {
 		if(Session::has('user')){
 			$user=Session::get('user');
 			$client = new Client();
-			$response = $client->get($this->api.'order_user/'.$user->userid,['future' => true,'auth' =>  ['administrator', 'KJHASDF89.ajHFAHF$']]);
+			$response = $client->get($this->api.'order_user/id/'.$user->userid,['future' => true,'auth' =>  ['administrator', 'KJHASDF89.ajHFAHF$']]);
 			$data=json_decode($response->getBody());
 			return view('content/or',['orders'=>$data->result,'user'=>$user]);
 		}
@@ -73,7 +98,7 @@ class HomeController extends Controller {
 		if(Session::has('user')){
 			$user=Session::get('user');
 			$client = new Client();
-			$response = $client->get($this->api.'po_user/'.$user->userid,['future' => true,'auth' =>  ['administrator', 'KJHASDF89.ajHFAHF$']]);
+			$response = $client->get($this->api.'po_user/id/'.$user->userid,['future' => true,'auth' =>  ['administrator', 'KJHASDF89.ajHFAHF$']]);
 			$data=json_decode($response->getBody());
 			return view('content/op',['orders'=>$data->result,'user'=>$user]);
 		}

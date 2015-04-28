@@ -18,8 +18,25 @@
 				</div>
 				<p>[[product.description]]</p>
 				@if(Session::has('user'))
-				<form> 
-					<input type="text" class="form-control" ng-model="product.quantity" do-numeric />
+					@if (count($errors) > 0)
+						<div class="alert alert-danger">
+							<ul>
+								@foreach ($errors->all() as $error)
+									<li>{{ $error }}</li>
+								@endforeach
+							</ul>
+						</div>
+					@endif
+					
+					@if(isset($message))
+						<div class="alert alert-info">
+							{{$message}}
+						</div>
+					@endif
+				<form method="POST" action="{{url('/Product/Buy')}}">
+					<input type="hidden" name="_token" value="{{ csrf_token() }}">
+					<input type="hidden" name="id" value="{{$product->productid}}" /> 
+					<input type="text" class="form-control" ng-change="validateStock([[product.quantity]])" ng-model="product.quantity" do-numeric name="quantity" />
 					<button type="submit" class="btn btn-primary" style="margin-top:10px;width:100%;">Beli</a>
 				</form>
 				@else

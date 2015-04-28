@@ -6,7 +6,7 @@
 		<?php $total=0; ?>
 		@foreach ($transactions as $tr)
 
-		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row-app" ng-controller="General">
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row-app" ng-controller="General" ng-cloak>
 			<img class="col-lg-2 col-md-2 col-sm-4 col-xs-3 row-img" ng-init="tr.gambar='{{$tr->gambar_small}}'"  ng-src="[[image+tr.gambar]]" />
 			<div class="col-md-8 col-sm-8 col-xs-9">
 				<h5 ng-init="tr.productname='{{$tr->productname}}'">[[tr.productname]]</h5>

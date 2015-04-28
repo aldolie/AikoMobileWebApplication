@@ -6,7 +6,7 @@
 		<?php $total=0; ?>
 		@foreach ($orders as $order)
 
-		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row-app" ng-controller="General">
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row-app" ng-controller="General" ng-cloak>
 			<img class="col-lg-2 col-md-2 col-sm-4 col-xs-3 row-img" ng-init="order.gambar='{{$order->gambar_small}}'"  ng-src="[[image+order.gambar]]" />
 			<div class="col-md-8 col-sm-8 col-xs-9">
 				<h5 ng-init="order.productname='{{$order->productname}}'">[[order.productname]]</h5>
