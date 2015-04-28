@@ -1,0 +1,51 @@
+#form-login{
+	margin-top:200px;
+}
+
+.form-none{
+	border-radius:0px;
+	padding:5px 10px;
+	font-size: 14px;
+}
+
+.heading-title{
+	color:#5FD3B6 !important;
+	text-transform: uppercase;
+	font-size: 42px;
+	font-family: Impact, Charcoal, sans-serif;
+	letter-spacing: 5px;
+	text-shadow:1px 1px 1px #ccc,-1px -1px 1px #ccc;
+}
+
+.btn-none{
+	background-color: #5FD3B6;
+	color:#000;
+	border-radius: 0px;
+	text-transform: uppercase;
+	font-family: 'Consolas';
+}
+
+.small{
+	width: 100px;
+	font-size: 14px;
+}
+
+.medium{
+	width: 150px;
+	font-size: 16px;
+}
+
+.large{
+	width: 200px;
+	font-size: 18px;
+	padding: 10px 15px;
+}
+
+.all{
+	display: block;
+	width: 100%;
+}
+
+.center-align{
+	text-align: center;
+}

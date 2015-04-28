@@ -1,0 +1,16 @@
+.row-app{
+	border-bottom: 1px solid #999;
+}
+
+.row-app>a{
+	border-bottom: 1px solid #999;
+}
+
+.row-img{
+	margin-top: 10px;
+}
+
+.btn-view{
+	margin-left: 20px;
+	margin-top: -5px;
+}
