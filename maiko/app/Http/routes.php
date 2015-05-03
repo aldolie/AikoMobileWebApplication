@@ -14,6 +14,8 @@
 Route::group(['prefix'=>'/','middleware'=>'authsign'],function(){
 	Route::get('/Signin','LoginController@index');
 	Route::post('/Signin','LoginController@signin');
+	Route::get('/Register','LoginController@register');
+	Route::post('/Register','LoginController@register_do');
 });
 
 
@@ -23,6 +25,9 @@ Route::group(['prefix'=>'/','middleware'=>'authpage'],function(){
 	Route::get('/Transaksi','HomeController@transaction');
 	Route::get('/Signout','LoginController@signout');
 	Route::post('/Product/Buy','HomeController@buy');
+	Route::get('/Profile','HomeController@profile');
+	Route::post('/Profile','HomeController@profile_do');
+	Route::post('/download','HomeController@download');
 	
 	
 });

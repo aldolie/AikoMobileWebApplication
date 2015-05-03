@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 
 class HomeController extends Controller {
 
@@ -42,17 +44,110 @@ class HomeController extends Controller {
 			$userid=$user->userid;
 			$productid=$request->input('id');
 			$client = new Client();
-			$response = $client->post($this->api.'transaction_undef_buy/'.$request->route('id') ,['future' => true,'body'=>['userid'=>$userid,'productid'=>$productid,'quantity'=>$quantity],'auth' =>  ['administrator', 'KJHASDF89.ajHFAHF$']]);
-			$data=json_decode($response->getBody());
-			if($data->status=='failed')
-			{
-				return Redirect::to($url)->withErrors(['0'=>$data->error]);
+			if($userid==null||$userid=='0'||$userid==''){
+				return Redirect::to($url)->withErrors(['0'=>'Harus Login terlebih dahulu']);
+
 			}
-			else if($data->status=='success'){
-				return Redirect::to($url)->with('message', 'Pembelian Berhasil');
+			else if($quantity==null||$quantity=='0'||$quantity==''){
+				return Redirect::to($url)->withErrors(['0'=>'Jumlah beli harus diisi']);
+
+			}
+			else if($productid==null||$productid=='0'||$productid==''){
+				return Redirect::to($url)->withErrors(['0'=>'Product harus di isi']);
+
+			}
+			else{
+				$response = $client->post($this->api.'transaction_undef_buy/'.$request->route('id') ,['future' => true,'body'=>['userid'=>$userid,'productid'=>$productid,'quantity'=>$quantity],'auth' =>  ['administrator', 'KJHASDF89.ajHFAHF$']]);
+				$data=json_decode($response->getBody());
+				if($data->status=='failed')
+				{
+					return Redirect::to($url)->withErrors(['0'=>$data->error]);
+				}
+				else if($data->status=='success'){
+					return Redirect::to($url)->withErrors(['0'=>'Pembelian Berhasil']);
+				}
 			}
 		}
 	}
+
+	public function download(Request $request){
+		if($request->input('href')!=null){
+			$href=$request->input('href');
+			$ext=explode('.', $href);
+			$ext=$ext[count($ext)-1];
+			$client = new Client();
+			$u=date("U");
+			$file="image_".$u.'.'.$ext;
+			file_put_contents($file, fopen($href, 'r'));
+			$headers = array('Content-Type: image/'.$ext);
+			return Response::download($file,'image.'.$ext,$headers);
+			
+		}
+	}
+
+	public function profile(){
+		$user=null;
+		if(Session::has('user')){
+			$user=Session::get('user');
+			$client = new Client();
+			$response = $client->get($this->api.'user/id/'.$user->userid,['future' => true,'auth' =>  ['administrator', 'KJHASDF89.ajHFAHF$']]);
+			$data=json_decode($response->getBody());
+			$dataUser=$data->result;
+			if($dataUser){
+				Session::set('user',$dataUser);
+				$user=Session::get('user');
+			}
+			return view('content/profile',['user'=>$user]);
+		}
+	}
+
+	public function profile_do(Request $request){
+		$user=null;
+		if(Session::has('user')){
+			$validator = Validator::make($request->all(),
+		    [
+		     'nama'=>'required',
+		     'alamat'=>'required',
+		     'email'=>'required|email',
+		     'telepon'=>'required'],
+		    [
+		    'nama.required'=>'Nama tidak boleh kosong',
+		    'alamat.required'=>'Alamat tidak boleh kosong',
+		    'email.required'=>'Email tidak boleh kosong',
+		    'telepon.required'=>'Telepon tidak boleh kosong',
+		    'email.email'=>'Email tidak sesuai format email']
+		);
+			if($validator->fails()){
+				 return Redirect::to('Profile')->withErrors($validator->messages());
+			}
+			else{
+				$nama=$request->input('nama');
+				$alamat=$request->input('alamat');
+				$email=$request->input('email');
+				$telepon=$request->input('telepon');
+				$user=Session::get('user');
+				$client = new Client();
+				$response = $client->post($this->api.'user_update/',['future' => true,'auth' =>  ['administrator', 'KJHASDF89.ajHFAHF$'],
+					'body'=>['userid'=>$user->userid,'nama'=>$nama,'alamat'=>$alamat,'telepon'=>$telepon,'email'=>$email,'note'=>$user->note,'bb'=>$user->bb]]);
+				$data=json_decode($response->getBody());
+				if($data->status=='success'){
+					$response = $client->get($this->api.'user/id/'.$user->userid,['future' => true,'auth' =>  ['administrator', 'KJHASDF89.ajHFAHF$']]);
+					$data=json_decode($response->getBody());
+					$dataUser=$data->result;
+					if($dataUser){
+						Session::set('user',$dataUser);
+						$user=Session::get('user');
+					}
+					return view('content/profile',['user'=>$user]);
+				}
+				else{
+					return Redirect::to('Profile')->withErrors(['0'=>'Simpan data gagal']);
+				}
+			}
+		}
+	}
+
+	//user_update_post
 
 	public function pready(){
 		$user=null;

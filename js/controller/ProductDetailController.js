@@ -1,7 +1,7 @@
-angular.module('maiko').controller('ProductDetailController',['$scope','IMAGE',function($scope,image){
+angular.module('maiko').controller('ProductDetailController',['$scope','ProductService','IMAGE',function($scope,ps,image){
 	$scope.image=image;
 	$scope.validateStock=function(before){
-		  if($scope.product.quantity==''){
+	    if($scope.product.quantity==''){
             return;
         }
         else if($scope.product.quantity<1)
@@ -12,4 +12,12 @@ angular.module('maiko').controller('ProductDetailController',['$scope','IMAGE',f
             $scope.product.quantity='';
         
 	};
+
+    $scope.download=function(){
+        ps.downloadImage(image+$scope.product.gambar).then(function(data){
+
+        },function(){
+
+        });
+    };
 }]);

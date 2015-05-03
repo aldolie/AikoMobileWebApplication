@@ -4,6 +4,7 @@ app.config(function($interpolateProvider){
 });
 app.constant('SERVICE','http://localhost/aiko/index.php/services/');
 app.constant('IMAGE','http://localhost/aiko/image/items/');
+app.constant('BASE','http://localhost/mobileaiko/');
 
 
 angular.module('maiko').controller('General',['$scope','IMAGE',function($scope,image){

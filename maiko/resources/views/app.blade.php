@@ -40,6 +40,7 @@
 					<li><a href="{{ url('/Order/Ready') }}">Order Ready</a></li>
 					<li><a href="{{ url('/Order/PO') }}">Order PO</a></li>
 					<li><a href="{{ url('/Transaksi') }}">Transaksi Terdahulu</a></li>
+					<li><a href="{{ url('/Profile') }}">Profile Anda</a></li>
 					@endif
 					<li><a href="{{ url('/Pembayaran') }}">Cara Pembayaran</a></li>
 				</ul>

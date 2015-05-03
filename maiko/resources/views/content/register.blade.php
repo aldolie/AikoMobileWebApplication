@@ -19,7 +19,7 @@
 	<![endif]-->
 
 </head>
-<body>
+<body ng-app="maiko">
 <div id="form-login">
 <div class="container-fluid">
 	<div class="row">
@@ -38,7 +38,7 @@
 						</div>
 					@endif
 
-					<form class="form-horizontal" role="form" method="POST" action="{{ url('/Signin/') }}">
+					<form class="form-horizontal" role="form" method="POST" action="{{ url('/Register/') }}">
 						<input type="hidden" name="_token" value="{{ csrf_token() }}">
 
 						<div class="form-group">
@@ -53,42 +53,50 @@
 							</div>
 						</div>
 
-						<!--<div class="form-group">
-							<div class="col-md-6 col-md-offset-4">
-								<div class="checkbox">
-									<label>
-										<input type="checkbox" name="remember"> Remember Me
-									</label>
-								</div>
+						<div class="form-group">
+							<div class="col-md-12">
+								<input type="password" class="form-control form-none" name="cpassword" placeholder="CONFIRMATION PASSWORD" >
 							</div>
-						</div>-->
+						</div>
 
 						<div class="form-group">
 							<div class="col-md-12">
-								<input type="submit" class="btn btn-none large all" value="Sign in" />
+								<input type="text" class="form-control form-none" name="nama" placeholder="NAMA" >
 							</div>
 						</div>
-
-						
-
-						
 
 						<div class="form-group">
-							<!--<div class="col-md-4 col-md-offset-2">
-								<a class="btn btn-link" href="{{ url('/password/email') }}">Forgot Your Password?</a>
-							</div>-->
-							<div class="col-md-4 col-md-offset-2">
-								<a class="btn btn-link" href="{{ url('/Register') }}">Register?</a>
+							<div class="col-md-12">
+								<input type="text" class="form-control form-none" name="alamat" placeholder="ALAMAT" >
 							</div>
 						</div>
 
+						<div class="form-group">
+							<div class="col-md-12">
+								<input type="text" do-numeric ng-model="telepon" class="form-control form-none" name="telepon" placeholder="TELEPON" >
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="col-md-12">
+								<input type="text" class="form-control form-none" name="email" placeholder="EMAIL" >
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-md-12">
+								<input type="submit" class="btn btn-none large all" value="REGISTER" />
+							</div>
+						</div>
 					</form>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-</div>	
+</div>
+	<script src="{{ asset('/js/angular.min.js') }}"></script>
+	<script src="{{ asset('/js/app.js') }}"></script>
+	<script src="{{ asset('/js/directives/numericDirective.js') }}"></script>
 	<script src="{{ asset('/js/jquery.min.js') }}"></script>
 	<script src="{{ asset('/js/bootstrap.min.js') }}"></script>
 </body>

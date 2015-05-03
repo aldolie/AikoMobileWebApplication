@@ -33,12 +33,18 @@
 							{{$message}}
 						</div>
 					@endif
-				<form method="POST" action="{{url('/Product/Buy')}}">
-					<input type="hidden" name="_token" value="{{ csrf_token() }}">
-					<input type="hidden" name="id" value="{{$product->productid}}" /> 
-					<input type="text" class="form-control" ng-change="validateStock([[product.quantity]])" ng-model="product.quantity" do-numeric name="quantity" />
-					<button type="submit" class="btn btn-primary" style="margin-top:10px;width:100%;">Beli</a>
-				</form>
+					@if(Session::get('user')->status==1)
+					<form method="POST" action="{{url('/Product/Buy')}}">
+						<input type="hidden" name="_token" value="{{ csrf_token() }}">
+						<input type="hidden" name="id" value="{{$product->productid}}" /> 
+						<input type="text" class="form-control" ng-change="validateStock([[product.quantity]])" ng-model="product.quantity" do-numeric name="quantity" />
+						<button type="submit" class="btn btn-primary" style="margin-top:10px;width:100%;">Beli</button>
+					</form>
+					<!-- <a class="btn btn-warning"  download="[[product.productname]]" title="[[product.productname]]" style="margin-top:10px;width:100%;" href="[[image+product.gambar]]">Simpan Gambar</a>-->
+					@else
+						<div class="alert alert-danger">Account anda belum aktif, Pastikan lengkapi data anda atau hubungi administrator</div>
+					@endif
+			   
 				@else
 					<div class="alert alert-danger">Untuk membeli barang Anda harus login terlebih dahulu</div>
 				@endif

@@ -28,7 +28,7 @@ class LoginController extends Controller {
 	 */
 	public function __construct()
 	{
-		$this->api='http://localhost/aiko/services/';
+		$this->api='http://supolshop.com/aiko/services/';
 		//$this->middleware('auth');
 	}
 
@@ -48,6 +48,75 @@ class LoginController extends Controller {
 	{
 		Session::remove('user');
 		return Redirect::to('Signin');
+	}
+
+	public function register(){
+		return view('content/register');
+	}
+
+	public function register_do(Request $request){
+		$validator = Validator::make($request->all(),
+		    ['username' => 'required',
+		     'password'=>'required',
+		     'cpassword'=>'required',
+		     'nama'=>'required',
+		     'alamat'=>'required',
+		     'email'=>'required|email',
+		     'telepon'=>'required'],
+		    ['username.required' => 'Username tidak boleh kosong',
+		    'password.required'=>'Password tidak boleh kosong',
+		    'cpassword.required'=>'Confirmation Password tidak boleh kosong',
+		    'nama.required'=>'Nama tidak boleh kosong',
+		    'alamat.required'=>'Alamat tidak boleh kosong',
+		    'email.required'=>'Email tidak boleh kosong',
+		    'telepon.required'=>'Telepon tidak boleh kosong',
+		    'email.email'=>'Email tidak sesuai format email']
+		);
+
+		if($validator->fails()){
+			 return Redirect::to('Register')->withErrors($validator->messages());
+		}
+		else{
+			$username=$request->input('username');
+			$password=$request->input('password');
+			$cpassword=$request->input('cpassword');
+			$nama=$request->input('nama');
+			$alamat=$request->input('alamat');
+			$email=$request->input('email');
+			$telepon=$request->input('telepon');
+			if($password!=$cpassword){
+				return Redirect::to('Register')->withErrors(['0'=>'Password dan Konfirmasi Password tidak cocok']);
+			}
+			else{
+				$client = new Client();
+				try{
+					$response =$client->post($this->api.'users_register', ['future'=>true,'auth' =>  ['administrator', 'KJHASDF89.ajHFAHF$'],
+						'body'=>['username'=>$username,'password'=>$password,'nama'=>$nama
+						,'alamat'=>$alamat,'telepon'=>$telepon,'email'=>$email]]);
+					$code=json_decode($response->getBody());
+					if($code->status=='success'){
+				    	$responseLogin =$client->post($this->api.'users_signin', ['future'=>true,'auth' =>  ['administrator', 'KJHASDF89.ajHFAHF$'],'body'=>['username'=>$username,'password'=>$password]]);
+						$codeLogin=json_decode($responseLogin->getBody());
+						if($codeLogin->status=='success'){
+						 	Session::set('user',$codeLogin->result);
+					    	return Redirect::to('/');
+					    }
+					    
+				    }
+				    else{
+				    	return Redirect::to('Register')->withErrors(['0'=>$code->reason]);
+			    	}
+				}
+				catch(RequestException $e){
+					echo $e->getRequest() . "\n";
+				    if ($e->hasResponse()) {
+				        echo $e->getResponse() . "\n";
+				    }
+				   
+				}
+			}
+			
+		}
 	}
 
 	public function signin(Request $request){
